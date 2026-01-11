@@ -1,31 +1,45 @@
-import dotenv from "dotenv"
-import telegramBot from "node-telegram-bot-api"
-dotenv.config()
+import express from "express";
+import dotenv from "dotenv";
+import TelegramBot from "node-telegram-bot-api";
 
-const token = process.env.TOKEN_API
+dotenv.config();
 
-const bot = new telegramBot(token, {polling: true})
+const token = process.env.TOKEN_API;
+const bot = new TelegramBot(token);
 
-const words = [
-    "Never","Yep","Maybe","No","Yes"
-]
-bot.onText(/\/start/, (msg) => {
-    const chatId = msg.chat.id
-    bot.sendMessage(chatId, "Hello! This bot helps you decide what todo or not to do with Yes or No.Write /word for get random massage")
-})
-bot.onText(/\/word/, (msg) => {
-    const chatId = msg.chat.id
-    const randomIndex = Math.floor(Math.random() * words.length)
-    const word = words[randomIndex]
-    bot.sendMessage(chatId, `your word: ${word}`)
-})
+const app = express();
+app.use(express.json());
 
-bot.on("message", (msg) => {
-    const chatId = msg.chat.id
-    if (!msg.text.startsWith("/")) bot.sendMessage(chatId, "Sorry, I can't get your word. Please write /word for get random word!")
-})
 app.get("/", (req, res) => {
   res.send("Telegram bot is running!");
 });
 
-export default bot
+app.post(`/bot${token}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
+const words = ["Never", "Yep", "Maybe", "No", "Yes"];
+
+bot.onText(/\/start/, (msg) => {
+  bot.sendMessage(
+    msg.chat.id,
+    "Hello! This bot helps you decide what to do or not to do. Write /word to get a random message."
+  );
+});
+
+bot.onText(/\/word/, (msg) => {
+  const word = words[Math.floor(Math.random() * words.length)];
+  bot.sendMessage(msg.chat.id, `Your word: ${word}`);
+});
+
+bot.on("message", (msg) => {
+  if (!msg.text.startsWith("/")) {
+    bot.sendMessage(
+      msg.chat.id,
+      "Sorry, I can't get your word. Please write /word to get a random word!"
+    );
+  }
+});
+
+export default app;
