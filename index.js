@@ -22,10 +22,7 @@ app.post(`/bot${token}`, (req, res) => {
 const words = ["Never", "Yep", "Maybe", "No", "Yes"];
 
 bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(
-    msg.chat.id,
-    "Hello! This bot helps you decide what to do or not to do. Write /word to get a random message."
-  );
+  bot.sendMessage(msg.chat.id, "Hello! Write /word to get random word");
 });
 
 bot.onText(/\/word/, (msg) => {
@@ -35,10 +32,7 @@ bot.onText(/\/word/, (msg) => {
 
 bot.on("message", (msg) => {
   if (!msg.text.startsWith("/")) {
-    bot.sendMessage(
-      msg.chat.id,
-      "Sorry, I can't get your word. Please write /word to get a random word!"
-    );
+    bot.sendMessage(msg.chat.id, "Sorry, please write /word to get random word!");
   }
 });
 
