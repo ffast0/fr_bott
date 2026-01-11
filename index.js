@@ -24,5 +24,8 @@ bot.on("message", (msg) => {
     const chatId = msg.chat.id
     if (!msg.text.startsWith("/")) bot.sendMessage(chatId, "Sorry, I can't get your word. Please write /word for get random word!")
 })
+app.get("/", (req, res) => {
+  res.send("Telegram bot is running!");
+});
 
 export default bot
