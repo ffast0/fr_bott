@@ -1,29 +1,28 @@
-import express from "express"
 import dotenv from "dotenv"
-import TelegramBot from "node-telegram-bot-api"
-
+import telegramBot from "node-telegram-bot-api"
 dotenv.config()
-const token = process.env.token_api
-const bot = new TelegramBot(token)
 
-const app = express()
-app.use(express.json())
+const token = process.env.TOKEN_API
 
-// Telegram webhook endpoint
-app.post(`/bot${token}`, (req, res) => {
-  bot.processUpdate(req.body)
-  res.sendStatus(200)
-})
+const bot = new telegramBot(token, {polling: true})
 
-const words = ["Never","Yep","Maybe","No","Yes"]
-
+const words = [
+    "Never","Yep","Maybe","No","Yes"
+]
 bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, "Hello! Write /word to get random word")
+    const chatId = msg.chat.id
+    bot.sendMessage(chatId, "Hello! This bot helps you decide what todo or not to do with Yes or No.Write /word for get random massage")
 })
-
 bot.onText(/\/word/, (msg) => {
-  const word = words[Math.floor(Math.random() * words.length)]
-  bot.sendMessage(msg.chat.id, `your word: ${word}`)
+    const chatId = msg.chat.id
+    const randomIndex = Math.floor(Math.random() * words.length)
+    const word = words[randomIndex]
+    bot.sendMessage(chatId, `your word: ${word}`)
 })
 
-export default app
+bot.on("message", (msg) => {
+    const chatId = msg.chat.id
+    if (!msg.text.startsWith("/")) bot.sendMessage(chatId, "Sorry, I can't get your word. Please write /word for get random word!")
+})
+
+export default bot
