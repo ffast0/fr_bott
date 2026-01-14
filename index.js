@@ -19,20 +19,20 @@ app.post(`/bot${token}`, (req, res) => {
   res.sendStatus(200);
 });
 
-const words = ["Never", "Yep", "Maybe", "No", "Yes"];
+const words = ["Bolishi mumkin emas", "Albata", "Bolishi mumkin", "Yoq", "Ha"];
 
 bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, "Hello! Write /word to get random word");
+  bot.sendMessage(msg.chat.id, "Salom! /word deb yoz soz chiqarib berishi uchun");
 });
 
 bot.onText(/\/word/, (msg) => {
   const word = words[Math.floor(Math.random() * words.length)];
-  bot.sendMessage(msg.chat.id, `Your word: ${word}`);
+  bot.sendMessage(msg.chat.id, `Seni sozing: ${word}`);
 });
 
 bot.on("message", (msg) => {
   if (!msg.text.startsWith("/")) {
-    bot.sendMessage(msg.chat.id, "Sorry, please write /word to get random word!");
+    bot.sendMessage(msg.chat.id, "Uzur, Iltimos /word deb yozing sizga harxil sozlarni chiqarishi uchun");
   }
 });
 
