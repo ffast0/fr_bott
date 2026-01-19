@@ -30,10 +30,10 @@ bot.onText(/\/word/, (msg) => {
   bot.sendMessage(msg.chat.id, `Seni sozing: ${word}`);
 });
 
-bot.on("message", (msg) => {
-  if (!msg.text.startsWith("/")) {
-    bot.sendMessage(msg.chat.id, "Uzur, Iltimos /word deb yozing sizga harxil sozlarni chiqarishi uchun");
-  }
-});
+// bot.on("message", (msg) => {
+//   if (!msg.text.startsWith("/")) {
+//     bot.sendMessage(msg.chat.id, "Uzur, Iltimos /word deb yozing sizga harxil sozlarni chiqarishi uchun");
+//   }
+// });
 
 export default app;
